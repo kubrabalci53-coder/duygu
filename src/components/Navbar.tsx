@@ -18,9 +18,10 @@ import {
   ExternalLink,
   ChevronDown,
   FileText,
-  Presentation
+  Presentation,
+  LogOut
 } from 'lucide-react';
-import { AvatarConfig } from '../types';
+import { AvatarConfig, StudentProfile } from '../types';
 import { AvatarIllustration } from './AvatarIllustration';
 import { sound } from '../utils/audio';
 
@@ -32,17 +33,18 @@ export type ActiveTab =
   | 'kesfet' 
   | 'sozluk' 
   | 'moral' 
-  | 'avatar' 
-  | 'ogretmen';
+  | 'avatar';
 
 interface NavbarProps {
   activeTab: ActiveTab;
   setActiveTab: (tab: ActiveTab) => void;
   avatar: AvatarConfig;
+  studentProfile?: StudentProfile;
   soundEnabled: boolean;
   setSoundEnabled: (val: boolean) => void;
   onOpenSync: () => void;
   onOpenSupport: () => void;
+  onLogout: () => void;
   streakCount: number;
 }
 
@@ -50,10 +52,12 @@ export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   setActiveTab,
   avatar,
+  studentProfile,
   soundEnabled,
   setSoundEnabled,
   onOpenSync,
   onOpenSupport,
+  onLogout,
   streakCount
 }) => {
   const [isShareOpen, setIsShareOpen] = useState<boolean>(false);
@@ -108,7 +112,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'sozluk', label: 'Duygu Sözlüğü & Makaleler', shortLabel: 'Rehberler', icon: BookMarked, color: 'text-purple-700 bg-purple-50' },
     { id: 'moral', label: 'Moral & Gülümseme', shortLabel: 'Gülümse', icon: Smile, color: 'text-rose-700 bg-rose-50' },
     { id: 'avatar', label: 'Karakterim', shortLabel: 'Avatarım', icon: User, color: 'text-teal-700 bg-teal-50' },
-    { id: 'ogretmen', label: 'Öğretmen Paneli', shortLabel: 'Öğretmen', icon: GraduationCap, color: 'text-stone-800 bg-stone-100' },
   ];
 
   return (
@@ -283,9 +286,30 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="flex items-center gap-2 p-1 pl-2 pr-3 bg-stone-100/90 hover:bg-stone-200/90 border border-stone-200 rounded-full transition-all cursor-pointer"
             >
               <AvatarIllustration config={avatar} size="sm" animate={false} />
-              <span className="hidden sm:inline text-xs font-semibold text-stone-800 max-w-[80px] truncate">
-                {avatar.name}
-              </span>
+              <div className="hidden sm:flex flex-col text-left">
+                <span className="text-xs font-bold text-stone-800 max-w-[90px] truncate">
+                  {studentProfile?.name || avatar.name}
+                </span>
+                {studentProfile?.classGrade && (
+                  <span className="text-[10px] text-orange-700 font-bold">
+                    {studentProfile.classGrade}
+                  </span>
+                )}
+              </div>
+            </button>
+
+            {/* Logout / Switch Role */}
+            <button
+              id="nav-logout-btn"
+              onClick={() => {
+                sound.playPop();
+                onLogout();
+              }}
+              className="flex items-center gap-1 p-2 sm:px-3 sm:py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-900 border border-stone-200 rounded-full text-xs font-bold transition-all cursor-pointer"
+              title="Rol Değiştir / Çıkış Yap"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Çıkış</span>
             </button>
           </div>
         </div>

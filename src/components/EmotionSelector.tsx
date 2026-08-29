@@ -13,7 +13,8 @@ import {
   CheckCircle2,
   Smile,
   RefreshCw,
-  Compass
+  Compass,
+  Film
 } from 'lucide-react';
 import { EmotionType, DiaryEntry, AvatarConfig } from '../types';
 import { EMOTIONS, COMMON_CAUSES, SENSITIVE_KEYWORDS } from '../data/emotions';
@@ -25,12 +26,14 @@ interface EmotionSelectorProps {
   onSaveEntry: (entry: Omit<DiaryEntry, 'id' | 'timestamp'>) => void;
   avatar: AvatarConfig;
   onOpenCheerUp: (emotion: EmotionType) => void;
+  onOpenVideoRecommendations: (emotion: EmotionType) => void;
 }
 
 export const EmotionSelector: React.FC<EmotionSelectorProps> = ({
   onSaveEntry,
   avatar,
-  onOpenCheerUp
+  onOpenCheerUp,
+  onOpenVideoRecommendations
 }) => {
   const [selectedEmotion, setSelectedEmotion] = useState<EmotionType>('mutlu');
   const [intensity, setIntensity] = useState<number>(7);
@@ -132,13 +135,10 @@ export const EmotionSelector: React.FC<EmotionSelectorProps> = ({
 
     setSaveSuccess(true);
 
-    // If emotion is tough (uzgun, ofkeli, korkmus, yalniz), offer cheer up modal
-    const toughEmotions: EmotionType[] = ['uzgun', 'ofkeli', 'korkmus', 'yalniz'];
-    if (toughEmotions.includes(selectedEmotion)) {
-      setTimeout(() => {
-        onOpenCheerUp(selectedEmotion);
-      }, 900);
-    }
+    // Trigger Video Recommendation Modal for the child after completing the emotion entry!
+    setTimeout(() => {
+      onOpenVideoRecommendations(selectedEmotion);
+    }, 700);
 
     // Reset fields after gentle delay
     setTimeout(() => {
@@ -482,7 +482,22 @@ export const EmotionSelector: React.FC<EmotionSelectorProps> = ({
             <span>Verilerin varsayılan olarak tamamen özel ve cihazında saklanır.</span>
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-3 w-full sm:w-auto flex-wrap">
+            {/* Direct Video Recommendations Tool */}
+            <button
+              type="button"
+              id="quick-video-recommendation-btn"
+              onClick={() => {
+                sound.playPop();
+                onOpenVideoRecommendations(selectedEmotion);
+              }}
+              className="px-3.5 py-3 text-xs sm:text-sm font-bold text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-2xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              title="Bu duyguya özel rehberlik & animasyon videolarını izle"
+            >
+              <Film className="w-4 h-4 text-amber-600" />
+              <span>Önerilen Videolar 🎬</span>
+            </button>
+
             {/* Quick Cheer Up Tool */}
             <button
               type="button"
@@ -491,7 +506,7 @@ export const EmotionSelector: React.FC<EmotionSelectorProps> = ({
                 sound.playPop();
                 onOpenCheerUp(selectedEmotion);
               }}
-              className="px-4 py-3 text-xs sm:text-sm font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-200 rounded-2xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-3 text-xs sm:text-sm font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-200 rounded-2xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <Smile className="w-4 h-4 text-orange-500" />
               <span>Gülümse & Rahatla</span>

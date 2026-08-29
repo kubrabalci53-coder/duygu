@@ -1,8 +1,85 @@
-import { DiaryEntry, AvatarConfig, EmotionType } from '../types';
+import { DiaryEntry, AvatarConfig, EmotionType, UserRole, StudentProfile, TeacherProfile } from '../types';
 
 const STORAGE_KEY_ENTRIES = 'duygu_gunlugum_entries_v1';
 const STORAGE_KEY_AVATAR = 'duygu_gunlugum_avatar_v1';
 const STORAGE_KEY_SETTINGS = 'duygu_gunlugum_settings_v1';
+const STORAGE_KEY_ROLE = 'duygu_gunlugum_role_v1';
+const STORAGE_KEY_STUDENT = 'duygu_gunlugum_student_v1';
+const STORAGE_KEY_TEACHER = 'duygu_gunlugum_teacher_v1';
+
+export const DEFAULT_STUDENT: StudentProfile = {
+  id: 'student-demo',
+  name: 'Duygu Gezgini',
+  classGrade: '6-B',
+  studentNumber: '412'
+};
+
+export const DEFAULT_TEACHER: TeacherProfile = {
+  id: 'teacher-demo',
+  name: 'Ayşe Yılmaz',
+  title: 'PDR & Rehberlik Danışmanı',
+  email: 'ayse.rehberlik@meb.k12.tr',
+  schoolName: 'Atatürk Ortaokulu',
+  assignedClasses: ['5-A', '6-B', '7-C', '8-A']
+};
+
+export function loadUserRole(): UserRole | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_ROLE);
+    if (!raw) return 'student'; // default to student
+    return JSON.parse(raw);
+  } catch {
+    return 'student';
+  }
+}
+
+export function saveUserRole(role: UserRole | null) {
+  try {
+    if (role === null) {
+      localStorage.removeItem(STORAGE_KEY_ROLE);
+    } else {
+      localStorage.setItem(STORAGE_KEY_ROLE, JSON.stringify(role));
+    }
+  } catch (err) {
+    console.error('Failed to save user role', err);
+  }
+}
+
+export function loadStudentProfile(): StudentProfile {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_STUDENT);
+    if (!raw) return DEFAULT_STUDENT;
+    return JSON.parse(raw);
+  } catch {
+    return DEFAULT_STUDENT;
+  }
+}
+
+export function saveStudentProfile(profile: StudentProfile) {
+  try {
+    localStorage.setItem(STORAGE_KEY_STUDENT, JSON.stringify(profile));
+  } catch (err) {
+    console.error('Failed to save student profile', err);
+  }
+}
+
+export function loadTeacherProfile(): TeacherProfile {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_TEACHER);
+    if (!raw) return DEFAULT_TEACHER;
+    return JSON.parse(raw);
+  } catch {
+    return DEFAULT_TEACHER;
+  }
+}
+
+export function saveTeacherProfile(profile: TeacherProfile) {
+  try {
+    localStorage.setItem(STORAGE_KEY_TEACHER, JSON.stringify(profile));
+  } catch (err) {
+    console.error('Failed to save teacher profile', err);
+  }
+}
 
 export const DEFAULT_AVATAR: AvatarConfig = {
   id: 'avatar-user',

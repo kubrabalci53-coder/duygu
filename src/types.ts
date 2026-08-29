@@ -97,3 +97,35 @@ export interface ClassAnonymousData {
   weeklyMoodScoreAvg: number; // 1-10
   stressAlertCount: number; // anonymous aggregate
 }
+
+export type UserRole = 'student' | 'teacher';
+
+export interface StudentProfile {
+  id: string;
+  name: string;
+  studentNumber?: string;
+  classGrade: string; // e.g., '6-B'
+  avatarConfig?: AvatarConfig;
+}
+
+export interface TeacherProfile {
+  id: string;
+  name: string;
+  title: string; // e.g., 'PDR & Rehberlik Danışmanı'
+  email: string;
+  schoolName: string;
+  assignedClasses: string[]; // e.g. ['5-A', '6-B', '7-C']
+}
+
+export interface RecommendedVideo {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  targetEmotion: EmotionType | 'all';
+  category: 'Duygu Farkındalığı' | 'Sakinleşme & Nefes' | 'Cesaret & Özgüven' | 'Arkadaşlık & İletişim' | 'Eğlenceli Mola';
+  thumbnailUrl: string;
+  embedUrl: string;
+  takeaways: string[];
+  reflectionQuestion: string;
+}
