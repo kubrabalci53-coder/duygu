@@ -1,0 +1,6 @@
+{
+  "name": "Duygu Günlüğüm",
+  "description": "Duygularını fark et, kendini keşfet. Öğrenciler için modern, güvenli, pedagojik ve çocuk dostu duygu günlüğü ve farkındalık uygulaması.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
